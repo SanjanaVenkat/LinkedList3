@@ -35,16 +35,26 @@ Node* addStudent(Node* start) {
   cout << "Enter student GPA" << endl;
   cin >> g;
   s->setgpa(g);
+  // first student
   if (current == NULL) {
     current = new Node(s);
     first = current;
   }
+  // next students
   else {
     while (current->getNext() != NULL) {
-      current = current->getNext();
+      
+      current = current->getNext(); 
     }
     Node* n = new Node(s);
-    current->setNext(n);
+     if (current->getStudent()->getid() < n->getStudent()->getid()) {
+       current->setNext(n);
+     }
+        else {
+	  cout << n->getStudent()->getid() << endl;
+	  cout << current->getStudent()->getid() << endl;
+	  current = n;
+      }
   }
   return first;
   }
