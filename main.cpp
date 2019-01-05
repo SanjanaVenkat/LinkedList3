@@ -22,6 +22,9 @@ Node* addStudent(Node* start) {
   float g = 0;
   Node* current = start;
   Node* first = start;
+  Node* last = NULL;
+  Node* next = NULL;
+  bool done = false;
   Student* s = new Student();
   cout << "Enter student first name" << endl;
   cin >> f;
@@ -35,26 +38,38 @@ Node* addStudent(Node* start) {
   cout << "Enter student GPA" << endl;
   cin >> g;
   s->setgpa(g);
+  Node* n = new Node(s);
   // first student
   if (current == NULL) {
     current = new Node(s);
     first = current;
+    done = true;
   }
   // next students
+  
   else {
-    while (current->getNext() != NULL) {
-      
-      current = current->getNext(); 
+    while (current != NULL) {
+      next = current;
+    
+    //less than next, greater than last
+      if (last == NULL && next->getStudent()->getid() > n->getStudent()->getid()) {
+      n->setNext(next);
+      first = n;
+      done = true;
     }
-    Node* n = new Node(s);
-     if (current->getStudent()->getid() < n->getStudent()->getid()) {
-       current->setNext(n);
+    else if (next->getStudent()->getid() > n->getStudent()->getid() && last->getStudent()->getid() < n->getStudent()->getid()) {
+      last->setNext(n);
+      n->setNext(next);
+      done = true;
      }
-        else {
-	  cout << n->getStudent()->getid() << endl;
-	  cout << current->getStudent()->getid() << endl;
-	  current = n;
-      }
+
+    
+     last = current;
+     current = current->getNext();
+    }
+    if (done == false) {
+      last->setNext(n);
+    }
   }
   return first;
   }
