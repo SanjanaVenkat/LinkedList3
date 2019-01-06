@@ -113,16 +113,53 @@ void averageStudents(Node* start) {
   cout << "Average gpa of all students: "<< setprecision(3) << ave << endl;
 }
 
+
+Node* deletest(Node* start, Node* last, Node* next, int studentid) {
+
+  if (next->getStudent()->getid() == studentid) {
+    if (last != NULL) {
+      last->setNext(next->getNext());
+      delete next;
+      return start;
+    }
+    else {
+      start = next->getNext();
+      delete next;
+      return start;
+    }
+  }
+    else {
+      if (next->getNext() != NULL) {
+      deletest(start, next, next->getNext(), studentid);
+      }
+      else {
+	cout << "Student with this id does not exist" << endl;
+	return start;
+      }
+    }
+
+  }
+  
+
+
 //deletes student by id
 Node* deleteStudent(Node* start) {
   Node* newstart = start;
   int studentid;
   int index;
   bool idexists = false;
-  Node* current = start;
-  Node* track = NULL;
+  Node* last = NULL;
+  Node* next = start;
   cout << "Enter student id" << endl;
   cin >> studentid;
+
+start = deletest(start, last, next, studentid);
+
+
+ return start;
+
+}
+/*
   //while current is valid and has not found id
  
     //current student
@@ -137,12 +174,13 @@ Node* deleteStudent(Node* start) {
       }
       idexists = true;
     }
-       
+
     else {
       track = current;
       current = current->getNext();
-      
+
     }
+   
  
   
   if (idexists == true) {
@@ -150,18 +188,20 @@ Node* deleteStudent(Node* start) {
   delete current;
   cout << "Student deleted" << endl;
   }
-  else if (idexists == false) {
+  
+  else if (idexists == false){
     if (current->getNext() == NULL) {
       cout << "Student with this id does not exist" << endl;
     }
     else {
-      
-    deleteStudent(current->getNext());
+      deleteStudent(current->getNext());
     }
     } 
  
   return newstart;
 }
+
+*/
 
 //asks what user wants to do
 void getResponse(char response[10]) {
