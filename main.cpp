@@ -14,6 +14,36 @@ Node* addStudent(Node* start);
 Node* deleteStudent(Node* start);
 void averageStudents(Node* start);
 
+// recursive add
+
+Node* add(Node* first, Node* last, Node* next, Node* n) {
+    bool done = false;
+    
+    //less than next, greater than last
+      if (last == NULL && next->getStudent()->getid() > n->getStudent()->getid()) {
+      n->setNext(next);
+      first = n;
+      done = true;
+    }
+    else if (next->getStudent()->getid() > n->getStudent()->getid() && last->getStudent()->getid() < n->getStudent()->getid()) {
+      last->setNext(n);
+      n->setNext(next);
+      done = true;
+     }
+
+    
+     last = next;
+     if (next->getNext() != NULL && done == false) {
+       first = add(first, last, next->getNext(), n);
+     }
+     
+
+     if (last->getNext() == NULL && done == false) {
+	last->setNext(n);
+     }
+     return first;
+}
+
 //adds a student
 Node* addStudent(Node* start) {
   char f[100];
@@ -23,7 +53,7 @@ Node* addStudent(Node* start) {
   Node* current = start;
   Node* first = start;
   Node* last = NULL;
-  Node* next = NULL;
+  Node* next = start;
   bool done = false;
   Student* s = new Student();
   cout << "Enter student first name" << endl;
@@ -48,29 +78,9 @@ Node* addStudent(Node* start) {
   // next students
   
   else {
-    while (current != NULL) {
-      next = current;
-    
-    //less than next, greater than last
-      if (last == NULL && next->getStudent()->getid() > n->getStudent()->getid()) {
-      n->setNext(next);
-      first = n;
-      done = true;
+    first = add(first, last, next, n);
     }
-    else if (next->getStudent()->getid() > n->getStudent()->getid() && last->getStudent()->getid() < n->getStudent()->getid()) {
-      last->setNext(n);
-      n->setNext(next);
-      done = true;
-     }
-
-    
-     last = current;
-     current = current->getNext();
-    }
-    if (done == false) {
-      last->setNext(n);
-    }
-  }
+  
   return first;
   }
 
@@ -78,11 +88,14 @@ Node* addStudent(Node* start) {
 void printStudents(Node* start) {
   
   Node* current = start;
-  while (current != NULL) {
+  if (current != NULL) {
     Student* s = current->getStudent();
     cout << s->getfirst() << " " << s->getlast() << " " << s->getid() << " "<< setprecision(3) << s->getgpa() << endl;
-    current = current->getNext();
-  }
+    if (current->getNext() != NULL) {
+      printStudents(current->getNext());
+    }
+}
+  
   }
 
 void averageStudents(Node* start) {
@@ -112,7 +125,6 @@ Node* deleteStudent(Node* start) {
   cin >> studentid;
   //while current is valid and has not found id
  
-  while (current != NULL && idexists == false) {
     //current student
     Student* s = current->getStudent();
     
@@ -132,15 +144,21 @@ Node* deleteStudent(Node* start) {
       
     }
  
-  }
+  
   if (idexists == true) {
   delete current->getStudent();
   delete current;
   cout << "Student deleted" << endl;
   }
-  else {
-    cout << "Student with this ID does not exist" << endl;
-  }
+  else if (idexists == false) {
+    if (current->getNext() == NULL) {
+      cout << "Student with this id does not exist" << endl;
+    }
+    else {
+      
+    deleteStudent(current->getNext());
+    }
+    } 
  
   return newstart;
 }
