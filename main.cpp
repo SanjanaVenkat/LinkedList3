@@ -165,8 +165,12 @@ Node* deleteStudent(Node* start) {
   cout << "Enter student id" << endl;
   cin >> studentid;
   //recursive delete after entering student id to delete
+  if (start != NULL) {
 start = deletest(start, last, next, studentid);
-
+  }
+  else {
+    cout << "There are no students in the list, nothing to delete" << endl;
+  }
 //returns new start
  return start;
 
