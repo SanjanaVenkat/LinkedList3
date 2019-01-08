@@ -1,6 +1,6 @@
 //Sanjana Venkat
-//12.17.18
-//Student list project using linked lists
+//1.8.19
+//Student list project using linked lists, modified to meet new requirements and using .o file
 #include <iostream>
 #include <cstring>
 #include <iomanip>
@@ -9,22 +9,23 @@
 
 using namespace std;
 
+//functions
 void printStudents(Node* start);
 Node* addStudent(Node* start);
 Node* deleteStudent(Node* start);
 void averageStudents(Node* start);
 
-// recursive add
-
+// recursive add function
 Node* add(Node* first, Node* last, Node* next, Node* n) {
     bool done = false;
     
-    //less than next, greater than last
+    //adds to start of list (first)
       if (last == NULL && next->getStudent()->getid() > n->getStudent()->getid()) {
       n->setNext(next);
       first = n;
       done = true;
     }
+      //adds to middle of the list based on values less than and greater in list
     else if (next->getStudent()->getid() > n->getStudent()->getid() && last->getStudent()->getid() < n->getStudent()->getid()) {
       last->setNext(n);
       n->setNext(next);
@@ -33,11 +34,12 @@ Node* add(Node* first, Node* last, Node* next, Node* n) {
 
     
      last = next;
+     //adds to beginning of list
      if (next->getNext() != NULL && done == false) {
        first = add(first, last, next->getNext(), n);
      }
      
-
+     //adds to end of list
      if (last->getNext() == NULL && done == false) {
 	last->setNext(n);
      }
@@ -76,11 +78,11 @@ Node* addStudent(Node* start) {
     done = true;
   }
   // next students
-  
+  //using recursion
   else {
     first = add(first, last, next, n);
     }
-  
+  //returns the start of the list
   return first;
   }
 
@@ -88,10 +90,13 @@ Node* addStudent(Node* start) {
 void printStudents(Node* start) {
   
   Node* current = start;
+  //while the student isn't null (end of list)
   if (current != NULL) {
     Student* s = current->getStudent();
+    //prints current student
     cout << s->getfirst() << " " << s->getlast() << " " << s->getid() << " "<< setprecision(3) << s->getgpa() << endl;
     if (current->getNext() != NULL) {
+      //using recursion to print next student
       printStudents(current->getNext());
     }
 }
@@ -103,6 +108,7 @@ void averageStudents(Node* start) {
   float ave = 0;
   int count = 0;
   Node* current = start;
+  //averages student gpas
   while (current!= NULL) {
     Student* s = current->getStudent();
     a = a + s->getgpa();
@@ -110,18 +116,22 @@ void averageStudents(Node* start) {
     current = current->getNext();
   }
   ave = a/count;
+  //prints gpa to three decimals
   cout << "Average gpa of all students: "<< setprecision(3) << ave << endl;
 }
 
 
+//recursive delete function
 Node* deletest(Node* start, Node* last, Node* next, int studentid) {
-
+  //if the student id matches
   if (next->getStudent()->getid() == studentid) {
+    //deletes student from list
     if (last != NULL) {
       last->setNext(next->getNext());
       delete next;
       return start;
     }
+    //delete first student
     else {
       start = next->getNext();
       delete next;
@@ -129,9 +139,11 @@ Node* deletest(Node* start, Node* last, Node* next, int studentid) {
     }
   }
     else {
+      //deleting recursive
       if (next->getNext() != NULL) {
       deletest(start, next, next->getNext(), studentid);
       }
+      //no id match found
       else {
 	cout << "Student with this id does not exist" << endl;
 	return start;
@@ -152,56 +164,14 @@ Node* deleteStudent(Node* start) {
   Node* next = start;
   cout << "Enter student id" << endl;
   cin >> studentid;
-
+  //recursive delete after entering student id to delete
 start = deletest(start, last, next, studentid);
 
-
+//returns new start
  return start;
 
 }
-/*
-  //while current is valid and has not found id
- 
-    //current student
-    Student* s = current->getStudent();
-    
-    if (studentid == s->getid()) {
-      if (track != NULL) {
-	track->setNext(current->getNext());
-      }
-      else {
-	newstart = newstart->getNext();
-      }
-      idexists = true;
-    }
 
-    else {
-      track = current;
-      current = current->getNext();
-
-    }
-   
- 
-  
-  if (idexists == true) {
-  delete current->getStudent();
-  delete current;
-  cout << "Student deleted" << endl;
-  }
-  
-  else if (idexists == false){
-    if (current->getNext() == NULL) {
-      cout << "Student with this id does not exist" << endl;
-    }
-    else {
-      deleteStudent(current->getNext());
-    }
-    } 
- 
-  return newstart;
-}
-
-*/
 
 //asks what user wants to do
 void getResponse(char response[10]) {
@@ -224,7 +194,8 @@ char response[10];
  char ave[] = "AVERAGE";
  bool running = true;
  getResponse(response);
-  while (running == true) {
+ //responses
+ while (running == true) {
     if (strcmp(add, response) == 0) {
       start = addStudent(start);
       getResponse(response);
