@@ -115,7 +115,12 @@ void averageStudents(Node* start) {
     count = count + 1;
     current = current->getNext();
   }
+  if (count != 0) {
   ave = a/count;
+  }
+  else {
+    ave = 0;
+  }
   //prints gpa to three decimals
   cout << "Average gpa of all students: "<< setprecision(3) << ave << endl;
 }
