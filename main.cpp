@@ -94,7 +94,7 @@ void printStudents(Node* start) {
   if (current != NULL) {
     Student* s = current->getStudent();
     //prints current student
-    cout << s->getfirst() << " " << s->getlast() << " " << s->getid() << " "<< setprecision(3) << s->getgpa() << endl;
+    cout << s->getfirst() << " " << s->getlast() << " " << s->getid() << " "<< setprecision(2)<<fixed << s->getgpa() << endl;
     if (current->getNext() != NULL) {
       //using recursion to print next student
       printStudents(current->getNext());
@@ -122,7 +122,7 @@ void averageStudents(Node* start) {
     ave = 0;
   }
   //prints gpa to three decimals
-  cout << "Average gpa of all students: "<< setprecision(3) << ave << endl;
+  cout << "Average gpa of all students: "<< setprecision(2) <<fixed << ave << endl;
 }
 
 
